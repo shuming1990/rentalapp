@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js}"></script>
+    <link th:href="@{https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/default.css}" rel="stylesheet"/>
+    <link rel="icon" th:href="@{/images/favicon.ico}" type="image/x-icon"/>
+    <meta charset="UTF-8"/>
+    <title>Available Cars</title>
+    <script type="text/javascript">
+        function test(checkedRadio){
+            $("#carNumber").val($(checkedRadio).val())
+        }
+    </script>
+</head>
+
+<body>
+<div class="contentDiv">
+    <a th:href="@{/hello}">Go back</a>
+    <table class="table table-hover table-condensed">
+        <legend>
+            <strong>We have these models for you.</strong>
+        </legend>
+        <thead>
+        <tr>
+            <th>Model</th>
+            <th>Car Number</th>
+            <th>Choose</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="car : ${cars}">
+            <td th:text="${car.model}"></td>
+            <td th:text="${car.carNumber}"></td>
+            <td><label>
+                <input type="radio" name="carNumber_radio" th:value="${car.carNumber}" onclick="test(this)"/>
+            </label></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <legend>
+        <strong>Please provide your information for reservation.</strong>
+    </legend>
+    <form th:action="@{/rent-car}" th:object="${submittedOrder}" method="post" class="form-horizontal" >
+
+        <div class="form-group">
+            <label for="startAt" class="col-sm-2 control-label">Start At:</label>
+            <div class="col-xs-4">
+                <input type="text" readonly="readonly"  class="form-control" id="startAt" name="startAt" th:field="*{startAt}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="predictedEndAt" class="col-sm-2 control-label">End At:</label>
+            <div class="col-xs-4">
+                <input type="text"  readonly="readonly" class="form-control" id="predictedEndAt" name="predictedEndAt" th:field="*{predictedEndAt}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="carNumber" class="col-sm-2 control-label">Car Number:</label>
+            <div class="col-xs-4">
+                <input type="text"  readonly="readonly" class="form-control" id="carNumber" name="carNumber" th:field="*{car.carNumber}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="mobile" class="col-sm-2 control-label">Mobile:</label>
+            <div class="col-xs-4">
+                <input type="text"  class="form-control" id="mobile" name="mobile" th:field="*{mobile}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email" class="col-sm-2 control-label">Email:</label>
+            <div class="col-xs-4">
+                <input type="text" class="form-control" id="email" name="email" th:field="*{email}"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="firstName" class="col-sm-2 control-label">First Name:</label>
+            <div class="col-xs-4">
+                <input type="text" class="form-control" id="firstName" name="firstName" th:field="*{firstName}"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="lastName" class="col-sm-2 control-label">Last Name:</label>
+            <div class="col-xs-4">
+                <input type="text" class="form-control" id="lastName" name="lastName" th:field="*{lastName}"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input class="btn btn-primary" type="submit" value="Rent"/>
+            </div>
+        </div>
+
+    </form>
+
+    <div>
+        <h4 style="color: darkred; align-content: center" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></h4>
+    </div>
+</div>
+</body>
+</html>

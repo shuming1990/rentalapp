@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js}"></script>
+    <link th:href="@{https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/default.css}" rel="stylesheet"/>
+    <link rel="icon" th:href="@{/images/favicon.ico}" type="image/x-icon"/>
+    <meta charset="UTF-8"/>
+    <title>Car Rental System</title>
+</head>
+<body>
+<h1>Car Rental</h1>
+<div class="contentDiv">
+    <legend>
+        <strong>When do you want to rent?</strong>
+    </legend>
+    <form th:action="@{/query-available-cars}" th:object="${carQuery}" method="post" class="form-horizontal">
+
+        <div class="form-group">
+            <label for="start_at" class="col-sm-2 control-label">Start At:</label>
+            <div class="col-xs-4">
+                <input type="datetime-local" class="form-control" id="start_at" name="startAt" th:field="*{startAt}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="end_at" class="col-sm-2 control-label">End At:</label>
+            <div class="col-xs-4">
+                <input type="datetime-local" class="form-control" id="end_at" name="startAt" th:field="*{endAt}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input class="btn btn-primary" type="submit" value="Find Available"/>
+            </div>
+        </div>
+
+        <div>
+            <h4 style="color: darkred; align-content: center" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></h4>
+        </div>
+        <div>
+            <h4 style="color: darkgreen; align-content: center" th:text="${success}" th:if="${not #strings.isEmpty(success)}"></h4>
+        </div>
+    </form>
+    <div>
+        Got reservations? Click  <a th:href="@{/check-reservation}">here.</a>
+    </div>
+</div>
+
+</body>
+</html>

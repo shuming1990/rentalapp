@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js}"></script>
+    <link th:href="@{https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/default.css}" rel="stylesheet"/>
+    <link rel="icon" th:href="@{/images/favicon.ico}" type="image/x-icon"/>
+    <meta charset="UTF-8"/>
+    <title>Car Rental System</title>
+</head>
+<body>
+<h1>Car Rental</h1>
+<div class="contentDiv">
+
+        <legend>
+            <strong>You can check your reservations here.  </strong>
+        </legend>
+
+        <form th:action="@{/check-my-reservations}" th:object="${reservationQuery}" method="post" class="form-horizontal">
+            <div class="form-group">
+                <label for="mobile" class="col-sm-2 control-label">Mobile:</label>
+                <div class="col-xs-4">
+                    <input type="text" class="form-control" id="mobile" name="mobile" th:field="*{mobile}" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input class="btn btn-primary" type="submit" value="Search"/>
+                </div>
+            </div>
+        </form>
+
+        <table class="table table-hover table-condensed">
+        <thead>
+        <tr>
+            <th>TransactionID</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Model</th>
+            <th>Car Number</th>
+            <th>Mobile</th>
+            <th>Email</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.transactionId}"></td>
+            <td th:text="${order.startAt}"></td>
+            <td th:text="${order.predictedEndAt}"></td>
+            <td th:text="${order.car.model}"></td>
+            <td th:text="${order.car.carNumber}"></td>
+            <td th:text="${order.mobile}"></td>
+            <td th:text="${order.email}"></td>
+            <td th:text="${order.firstName}"></td>
+            <td th:text="${order.lastName}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/hello}">Go back</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+        <mapper namespace="com.rental.car.rentalapp.service.rent.repository.order.OrderRepository">
+
+            <resultMap id="Order" type="com.rental.car.rentalapp.service.rent.model.Order">
+                    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+                    <result column="status" jdbcType="INTEGER" property="status" />
+                    <result column="start_at" jdbcType="TIMESTAMP" property="startAt" />
+                    <result column="predict_end_at" jdbcType="TIMESTAMP" property="predictedEndAt" />
+                    <result column="actual_end_at" jdbcType="TIMESTAMP" property="actualEndAt" />
+                    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+                    <result column="email" jdbcType="VARCHAR" property="email" />
+                    <result column="first_name" jdbcType="VARCHAR" property="firstName" />
+                    <result column="last_name" jdbcType="VARCHAR" property="lastName" />
+                    <association property="car" resultMap="Car" javaType="com.rental.car.rentalapp.service.rent.model.Car"/>
+            </resultMap>
+
+            <resultMap id="Car" type="com.rental.car.rentalapp.service.rent.model.Car">
+                <result column="car_id" jdbcType="BIGINT" property="carId" />
+                <result column="model" jdbcType="VARCHAR" property="model" />
+                <result column="car_number" jdbcType="VARCHAR" property="carNumber" />
+            </resultMap>
+
+            <select id="findBy" resultMap="Order" >
+                select * from (select order_id, status, start_at, predict_end_at, actual_end_at, car_number, mobile, email, first_name, last_name from "ORDER" where mobile = #{mobile}) a
+                left join car b on a.car_number = b.car_number
+            </select>
+
+            <insert id="save" parameterType="com.rental.car.rentalapp.service.rent.model.Order" >
+                insert into  "ORDER"(status, start_at, predict_end_at, actual_end_at, car_number, mobile, email, first_name, last_name)
+                select  #{status}, #{startAt}, #{predictedEndAt}, #{actualEndAt}, #{car.carNumber}, #{mobile}, #{email}, #{firstName}, #{lastName}
+                from dual where not exists (
+                select * from "ORDER" where
+                (start_at >=#{startAt} and start_at &lt;=#{actualEndAt})
+                or (actual_end_at >=#{startAt} and actual_end_at &lt;=#{actualEndAt})
+                or (start_at &lt;=#{startAt} and actual_end_at>=#{actualEndAt}) and car_number = #{car.carNumber}
+                );
+            </insert>
+
+        </mapper>       
