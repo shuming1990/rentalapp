@@ -1,3 +1,4 @@
+drop table car;
 create table car
 (
     car_id BIGINT primary key auto_increment ,
