@@ -25,6 +25,13 @@ public class ViewController {
         this.rentService = rentService;
     }
 
+    @RequestMapping("/")
+    public String index(Model model) {
+        if(model.getAttribute("carQuery")==null)
+            model.addAttribute("carQuery",new CarQuery());
+        return "hello";
+    }
+
     @RequestMapping("/hello")
     public String hello(Model model) {
         if(model.getAttribute("carQuery")==null)
