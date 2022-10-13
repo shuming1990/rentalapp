@@ -1,4 +1,4 @@
-drop table car;
+drop table if exists car;
 create table car
 (
     car_id BIGINT primary key auto_increment ,
@@ -6,7 +6,7 @@ create table car
     car_number varchar(10) not null unique
 );
 
-drop table "ORDER";
+drop table if exists  "ORDER";
 create table "ORDER"
 (
     order_id       BIGINT primary key auto_increment,
