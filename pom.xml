@@ -11,7 +11,7 @@
 	<groupId>com.rental.car</groupId>
 	<artifactId>rentalapp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>rentalapp</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
