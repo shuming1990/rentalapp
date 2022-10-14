@@ -17,8 +17,8 @@ public class CarApiController {
     }
 
     @GetMapping(value="/query")
-    public ResponseEntity queryAvailableCars(@RequestParam("startAt") String startAt, @RequestParam("endAt") String endAt, @RequestParam("model")String model){
-        return rentService.findAvailableCars(model,startAt, endAt);
+    public ResponseEntity queryAvailableCars(@RequestParam("startAt") String startAt, @RequestParam("endAt") String endAt){
+        return rentService.findAvailableCars("",startAt, endAt);
     }
 
 
