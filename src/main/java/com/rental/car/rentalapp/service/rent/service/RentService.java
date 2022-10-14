@@ -40,7 +40,7 @@ public class RentService{
     }
 
     public ResponseEntity findAvailableCars(String model, String startAt, String endAt) {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-ddTHH:mm");
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime start;
         LocalDateTime end;
         try{
