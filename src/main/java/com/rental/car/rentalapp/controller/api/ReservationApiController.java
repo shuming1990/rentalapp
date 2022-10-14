@@ -26,8 +26,8 @@ public class ReservationApiController {
     }
 
     @GetMapping(value="/find",produces = "application/json;charset=UTF-8")
-    public ResponseEntity find(@RequestParam("mobile")String mobile, @RequestParam("confirmCode") String confirmCode){
-        return rentService.findReservationsByPhone(mobile,confirmCode);
+    public ResponseEntity find(@RequestParam("mobile")String mobile){
+        return rentService.findReservationsByPhone(mobile,null);
     }
 
 }
