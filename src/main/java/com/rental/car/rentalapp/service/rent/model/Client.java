@@ -2,17 +2,12 @@ package com.rental.car.rentalapp.service.rent.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.time.temporal.TemporalField;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.rental.car.rentalapp.infrasturcture.exception.AppException;
 import com.rental.car.rentalapp.infrasturcture.exception.ResultCode;
-import com.rental.car.rentalapp.service.rent.repository.car.CarRepository;
-import com.rental.car.rentalapp.service.rent.repository.order.OrderRepository;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -23,17 +18,17 @@ import lombok.Setter;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Client implements Serializable {
-    private Order order;
+    private Reservation reservation;
     private final static ZoneOffset CHINA_ZONE_OFFSET = ZoneOffset.of("+08:00");
 
     public List<Car> query(Car car, LocalDateTime startAt, LocalDateTime endAt){
         return car.findAvailableBy(startAt, endAt);
     }
 
-    public Order reserve() {
+    public Reservation reserve() {
         try {
-            if (order.create() > 0)
-                return order;
+            if (reservation.create() > 0)
+                return reservation;
             else
                 throw new AppException(ResultCode.NOT_SAVE, "Order not placed. Please check the available time slot again.");
         }catch (Exception ex){
@@ -42,18 +37,18 @@ public class Client implements Serializable {
         }
     }
 
-    public List<Order> findOrderWith(String mobile){
-        return order.findBy(mobile);
+    public List<Reservation> findReservationsWith(String mobile){
+        return reservation.findBy(mobile);
     }
 
-    public Order cancel(String transactionId){
+    public Reservation cancel(String transactionId){
 
-        return order; 
+        return reservation;
     }
 
-    public Order returnCar(Car car){
-        Order order = Order.builder().build();
+    public Reservation returnCar(Car car){
+        Reservation reservation = Reservation.builder().build();
 
-        return order;
+        return reservation;
     }
 }

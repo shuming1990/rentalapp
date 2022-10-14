@@ -45,16 +45,16 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="order : ${orders}">
-            <td th:text="${order.transactionId}"></td>
-            <td th:text="${order.startAt}"></td>
-            <td th:text="${order.predictedEndAt}"></td>
-            <td th:text="${order.car.model}"></td>
-            <td th:text="${order.car.carNumber}"></td>
-            <td th:text="${order.mobile}"></td>
-            <td th:text="${order.email}"></td>
-            <td th:text="${order.firstName}"></td>
-            <td th:text="${order.lastName}"></td>
+        <tr th:each="reservation : ${reservations}">
+            <td th:text="${reservation.transactionId}"></td>
+            <td th:text="${reservation.startAt}"></td>
+            <td th:text="${reservation.predictedEndAt}"></td>
+            <td th:text="${reservation.car.model}"></td>
+            <td th:text="${reservation.car.carNumber}"></td>
+            <td th:text="${reservation.mobile}"></td>
+            <td th:text="${reservation.email}"></td>
+            <td th:text="${reservation.firstName}"></td>
+            <td th:text="${reservation.lastName}"></td>
         </tr>
         </tbody>
     </table>

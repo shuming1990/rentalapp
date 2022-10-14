@@ -13,7 +13,7 @@
 
             <select id="findAvailableCarsBy" resultMap="Car" >
                 select car_id, model, car_number from car where car_number not in
-                (select car_number from "ORDER" where (start_at>=#{startAt} and start_at &lt;= #{endAt})
+                (select car_number from reservation where (start_at>=#{startAt} and start_at &lt;= #{endAt})
                                                    or (actual_end_at>=#{startAt}  and actual_end_at&lt;= #{endAt})
                                                    or (start_at&lt;= #{startAt} and actual_end_at>=#{endAt}))
             </select>

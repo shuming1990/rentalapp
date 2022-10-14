@@ -5,9 +5,9 @@ create table car
     model varchar(50) not null,
     car_number varchar(10) not null unique
 );
-
 drop table if exists  "ORDER";
-create table "ORDER"
+drop table if exists  reservation;
+create table reservation
 (
     order_id       BIGINT primary key auto_increment,
     status         integer default 0,

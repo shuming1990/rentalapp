@@ -4,7 +4,7 @@ import com.rental.car.rentalapp.infrasturcture.dto.ResponseEntity;
 import com.rental.car.rentalapp.infrasturcture.exception.AppException;
 import com.rental.car.rentalapp.infrasturcture.exception.ResultCode;
 import com.rental.car.rentalapp.service.rent.model.Car;
-import com.rental.car.rentalapp.service.rent.model.Order;
+import com.rental.car.rentalapp.service.rent.model.Reservation;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,7 +36,7 @@ class RentServiceTest {
     @Transactional
     @Rollback
     void should_find_available_cars(){
-        Order order  = Order.builder()
+        Reservation reservation = Reservation.builder()
                 .startAt(LocalDateTime.of(2099, 1, 1,0,0,0))
                 .predictedEndAt(LocalDateTime.of(2099, 1, 2,0,0,0))
                 .actualEndAt(LocalDateTime.of(2099, 1, 2,0,0,0))
@@ -46,7 +46,7 @@ class RentServiceTest {
                 .car(Car.builder().carNumber("CAR001").build())
                 .firstName("John")
                 .lastName("Doe").build();
-        rentService.create(order);
+        rentService.create(reservation);
 
         ResponseEntity<List<Car>> responseEntity = rentService.findAvailableCars("", "2099-01-01 00:00:00", "2099-01-01 10:00:00");
         assertEquals(ResultCode.SUCCESS.getCode(),responseEntity.getResponseCode());
@@ -57,7 +57,7 @@ class RentServiceTest {
     @Transactional
     @Rollback
     void should_create_successfully() {
-        Order order  = Order.builder()
+        Reservation reservation = Reservation.builder()
                 .startAt(LocalDateTime.of(2099, 1, 1,0,0,0))
                 .predictedEndAt(LocalDateTime.of(2099, 1, 2,0,0,0))
                 .actualEndAt(LocalDateTime.of(2099, 1, 2,0,0,0))
@@ -68,7 +68,7 @@ class RentServiceTest {
                 .firstName("John")
                 .lastName("Doe").build();
 
-        ResponseEntity responseEntity = rentService.create(order);
+        ResponseEntity responseEntity = rentService.create(reservation);
         assertEquals(ResultCode.SUCCESS.getCode(), responseEntity.getResponseCode());
         assertNotNull(responseEntity.getResponseObject());
     }
@@ -77,7 +77,7 @@ class RentServiceTest {
     @Transactional
     @Rollback
     void failure_on_overlapping_timeslot_save(){
-        Order order  = Order.builder()
+        Reservation reservation = Reservation.builder()
                 .startAt(LocalDateTime.of(2099, 1, 1,0,0,0))
                 .predictedEndAt(LocalDateTime.of(2099, 1, 2,0,0,0))
                 .actualEndAt(LocalDateTime.of(2099, 1, 2,0,0,0))
@@ -87,10 +87,10 @@ class RentServiceTest {
                 .car(Car.builder().carNumber("CAR001").build())
                 .firstName("John")
                 .lastName("Doe").build();
-        ResponseEntity responseEntity = rentService.create(order);
+        ResponseEntity responseEntity = rentService.create(reservation);
         assertEquals(ResultCode.SUCCESS.getCode(), responseEntity.getResponseCode());
 
-        Order newOrder  = Order.builder()
+        Reservation newReservation = Reservation.builder()
                 .startAt(LocalDateTime.of(2099, 1, 1,0,0,0))
                 .predictedEndAt(LocalDateTime.of(2099, 1, 3,0,0,0))
                 .actualEndAt(LocalDateTime.of(2099, 1, 3,0,0,0))
@@ -100,14 +100,14 @@ class RentServiceTest {
                 .car(Car.builder().carNumber("CAR001").build())
                 .firstName("John")
                 .lastName("Doe").build();
-        assertThrows(AppException.class, ()-> rentService.create(newOrder));
+        assertThrows(AppException.class, ()-> rentService.create(newReservation));
     }
 
     @Test
     @Transactional
     @Rollback
-    void findOrdersByPhone() {
-        Order order  = Order.builder()
+    void findReservationsByPhone() {
+        Reservation reservation = Reservation.builder()
                 .startAt(LocalDateTime.of(2099, 1, 1,0,0,0))
                 .predictedEndAt(LocalDateTime.of(2099, 1, 2,0,0,0))
                 .actualEndAt(LocalDateTime.of(2099, 1, 2,0,0,0))
@@ -117,9 +117,9 @@ class RentServiceTest {
                 .car(Car.builder().carNumber("CAR001").build())
                 .firstName("John")
                 .lastName("Doe").build();
-        rentService.create(order);
+        rentService.create(reservation);
 
-        ResponseEntity<List<Order>> r = rentService.findOrdersByPhone("9898989898",null);
+        ResponseEntity<List<Reservation>> r = rentService.findReservationsByPhone("9898989898",null);
         assertEquals(ResultCode.SUCCESS.getCode(), r.getResponseCode());
         assertEquals(1, r.getResponseObject().size());
     }

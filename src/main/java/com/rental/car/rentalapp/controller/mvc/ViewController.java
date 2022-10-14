@@ -2,10 +2,9 @@ package com.rental.car.rentalapp.controller.mvc;
 
 import com.rental.car.rentalapp.infrasturcture.dto.CarQuery;
 import com.rental.car.rentalapp.infrasturcture.dto.ReservationQuery;
-import com.rental.car.rentalapp.infrasturcture.dto.SubmittedOrder;
-import com.rental.car.rentalapp.infrasturcture.exception.AppException;
+import com.rental.car.rentalapp.infrasturcture.dto.SubmittedReservation;
 import com.rental.car.rentalapp.service.rent.model.Car;
-import com.rental.car.rentalapp.service.rent.model.Order;
+import com.rental.car.rentalapp.service.rent.model.Reservation;
 import com.rental.car.rentalapp.service.rent.service.RentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,14 +47,14 @@ public class ViewController {
     @RequestMapping("/check-my-reservations")
     public String searchMyReservation(Model model, @ModelAttribute ReservationQuery reservationQuery) {
         model.addAttribute("reservationQuery",reservationQuery);
-        model.addAttribute("orders", rentService.findOrdersByPhone(reservationQuery.getMobile(), null).getResponseObject());
+        model.addAttribute("reservations", rentService.findReservationsByPhone(reservationQuery.getMobile(), null).getResponseObject());
         return "reservation";
     }
 
     @RequestMapping("/query-available-cars")
     public String query(Model model, @ModelAttribute CarQuery carQuery){
 
-        SubmittedOrder submittedOrder = SubmittedOrder.builder().startAt(carQuery.getStartAt()).predictedEndAt(carQuery.getEndAt()).build();
+        SubmittedReservation submittedReservation = SubmittedReservation.builder().startAt(carQuery.getStartAt()).predictedEndAt(carQuery.getEndAt()).build();
         List<Car> cars;
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
@@ -69,25 +68,25 @@ public class ViewController {
             return hello(model);
         }
         model.addAttribute("cars", cars);
-        model.addAttribute("submittedOrder",submittedOrder);
+        model.addAttribute("submittedReservation", submittedReservation);
         return "available";
     }
 
     @RequestMapping("/rent-car")
-    public String rent(Model model, @ModelAttribute SubmittedOrder submittedOrder){
-        CarQuery carQuery = CarQuery.builder().startAt(submittedOrder.getStartAt()).endAt(submittedOrder.getPredictedEndAt()).build();
+    public String rent(Model model, @ModelAttribute SubmittedReservation submittedReservation){
+        CarQuery carQuery = CarQuery.builder().startAt(submittedReservation.getStartAt()).endAt(submittedReservation.getPredictedEndAt()).build();
         try {
-            submittedOrder.setStartAt(submittedOrder.getStartAt().replaceAll("T", " ") + ":00");
-            submittedOrder.setPredictedEndAt(submittedOrder.getPredictedEndAt().replaceAll("T", " ") + ":00");
+            submittedReservation.setStartAt(submittedReservation.getStartAt().replaceAll("T", " ") + ":00");
+            submittedReservation.setPredictedEndAt(submittedReservation.getPredictedEndAt().replaceAll("T", " ") + ":00");
 
-            Order order = new Order(submittedOrder);
-            rentService.create(order);
+            Reservation reservation = new Reservation(submittedReservation);
+            rentService.create(reservation);
         }catch (Exception exception){
             model.addAttribute("msg", exception.getMessage());
             return query(model, carQuery);
         }
         model.addAttribute("carQuery", new CarQuery());
-        model.addAttribute("success", "Order Placed!");
+        model.addAttribute("success", "Reservation Placed!");
         return "hello";
     }
 }

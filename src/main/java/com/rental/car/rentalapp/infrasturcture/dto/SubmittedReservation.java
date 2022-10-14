@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class SubmittedOrder {
+public class SubmittedReservation {
     private String transactionId;
     private String startAt;
     private String predictedEndAt;
