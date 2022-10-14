@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -32,6 +33,7 @@ class RentServiceTest {
     }
 
     @Test
+    @Transactional
     @Rollback
     void should_find_available_cars(){
         Order order  = Order.builder()
@@ -52,6 +54,7 @@ class RentServiceTest {
     }
 
     @Test
+    @Transactional
     @Rollback
     void should_create_successfully() {
         Order order  = Order.builder()
@@ -71,6 +74,7 @@ class RentServiceTest {
     }
 
     @Test
+    @Transactional
     @Rollback
     void failure_on_overlapping_timeslot_save(){
         Order order  = Order.builder()
@@ -100,6 +104,7 @@ class RentServiceTest {
     }
 
     @Test
+    @Transactional
     @Rollback
     void findOrdersByPhone() {
         Order order  = Order.builder()
