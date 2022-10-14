@@ -1,6 +1,7 @@
 package com.rental.car.rentalapp.controller.api;
 
 import com.rental.car.rentalapp.infrasturcture.dto.ResponseEntity;
+import com.rental.car.rentalapp.infrasturcture.dto.SubmittedReservation;
 import com.rental.car.rentalapp.service.rent.model.Reservation;
 import com.rental.car.rentalapp.service.rent.service.RentService;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,8 @@ public class ReservationApiController {
     }
 
     @PostMapping(value="/create",produces = "application/json;charset=UTF-8")
-    public ResponseEntity create(@RequestBody Reservation reservation){
-        return rentService.create(reservation);
+    public ResponseEntity create(@RequestBody SubmittedReservation reservation){
+        return rentService.create(new Reservation(reservation));
     }
 
     @GetMapping(value="/confirm-code",produces = "application/json;charset=UTF-8")
