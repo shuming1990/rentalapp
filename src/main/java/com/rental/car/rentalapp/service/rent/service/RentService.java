@@ -66,14 +66,20 @@ public class RentService{
     }
 
     public ResponseEntity create(Order order) {
+        // time rules violation
+        if(order.getStartAt().isBefore(LocalDateTime.now()))
+            throw new AppException(ResultCode.RULE_VIOLATION, "The start time should be after current time.");
         if(order.getStartAt().isAfter(order.getPredictedEndAt()))
             throw new AppException(ResultCode.RULE_VIOLATION, "The start time should before end time.");
-        order.setOrderRepository(orderRepository);
         // mobile should not be blank
         if(Strings.isBlank(order.getMobile().trim()))
             throw new AppException(ResultCode.RULE_VIOLATION, "Mobile phone is required.");
         if(Strings.isBlank(order.getFirstName().trim()) || Strings.isBlank(order.getFirstName().trim()))
             throw new AppException(ResultCode.RULE_VIOLATION, "Full name is required.");
+        // car number should not be black
+        if(Strings.isBlank(order.getCar().getCarNumber().trim()))
+            throw new AppException(ResultCode.RULE_VIOLATION, "You have to choose a car for reservation.");
+        order.setOrderRepository(orderRepository);
         Client client = Client.builder().order(order).build();
         return new ResponseEntity<>(ResultCode.SUCCESS,client.reserve());
     }

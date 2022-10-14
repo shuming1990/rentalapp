@@ -54,19 +54,17 @@ public class ViewController {
 
     @RequestMapping("/query-available-cars")
     public String query(Model model, @ModelAttribute CarQuery carQuery){
+
         SubmittedOrder submittedOrder = SubmittedOrder.builder().startAt(carQuery.getStartAt()).predictedEndAt(carQuery.getEndAt()).build();
-
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        carQuery.setStartAt(carQuery.getStartAt().replaceAll("T", " ") + ":00");
-        carQuery.setEndAt(carQuery.getEndAt().replaceAll("T", " ") + ":00");
-
-        LocalDateTime start = LocalDateTime.parse(carQuery.getStartAt(), df);
-        LocalDateTime end = LocalDateTime.parse(carQuery.getEndAt(), df);
-
         List<Car> cars;
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
+            carQuery.setStartAt(carQuery.getStartAt().replaceAll("T", " ") + ":00");
+            carQuery.setEndAt(carQuery.getEndAt().replaceAll("T", " ") + ":00");
+            LocalDateTime start = LocalDateTime.parse(carQuery.getStartAt(), df);
+            LocalDateTime end = LocalDateTime.parse(carQuery.getEndAt(), df);
             cars = (List<Car>) rentService.findAvailableCars(carQuery.getModel(),start, end).getResponseObject();
-        }catch (AppException appException){
+        } catch (Exception appException){
             model.addAttribute("msg", appException.getMessage());
             return hello(model);
         }
@@ -78,14 +76,14 @@ public class ViewController {
     @RequestMapping("/rent-car")
     public String rent(Model model, @ModelAttribute SubmittedOrder submittedOrder){
         CarQuery carQuery = CarQuery.builder().startAt(submittedOrder.getStartAt()).endAt(submittedOrder.getPredictedEndAt()).build();
-        submittedOrder.setStartAt(submittedOrder.getStartAt().replaceAll("T", " ") + ":00");
-        submittedOrder.setPredictedEndAt(submittedOrder.getPredictedEndAt().replaceAll("T", " ") + ":00");
-
-        Order order = new Order(submittedOrder);
         try {
+            submittedOrder.setStartAt(submittedOrder.getStartAt().replaceAll("T", " ") + ":00");
+            submittedOrder.setPredictedEndAt(submittedOrder.getPredictedEndAt().replaceAll("T", " ") + ":00");
+
+            Order order = new Order(submittedOrder);
             rentService.create(order);
-        }catch (AppException appException){
-            model.addAttribute("msg", appException.getMessage());
+        }catch (Exception exception){
+            model.addAttribute("msg", exception.getMessage());
             return query(model, carQuery);
         }
         model.addAttribute("carQuery", new CarQuery());
